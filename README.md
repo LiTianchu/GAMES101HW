@@ -1,3 +1,4 @@
 # GAMES101HW
 
-Tianchu's GAMES101 Computer Graphics homework implementation
+MY UCSB GAMES101 Computer Graphics homework implementations.
+Course Site: https://sites.cs.ucsb.edu/~lingqi/teaching/games101.html
