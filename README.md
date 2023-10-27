@@ -1,3 +1,3 @@
 # GAMES101HW
 
-Tianchu's Games101 homework implementation
+Tianchu's GAMES101 Computer Graphics homework implementation
