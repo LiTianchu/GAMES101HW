@@ -47,7 +47,7 @@ static bool insideTriangle(int x, int y, const Vector3f* _v)
     Vector3f v2 = _v[2] - _v[1]; //vector2
     Vector3f v3 = _v[0] - _v[2]; //vector3
 
-    Vector2f pt = Vector2f(x,y);
+    Vector3f pt = Vector3f(x,y,0);
 
     //to detect inside or ouside by calculating cross product
     Vector3f prod1 = v1.cross(pt - _v[0]);
@@ -131,7 +131,7 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
     float maxY = std::numeric_limits<float>::min();
 
     for(int i=0;i<3;i++){
-        Vector3f pt = v[0];
+        Vector4f pt = v[i];
         if(pt.x() < minX){
             minX = pt.x();
         }
@@ -139,10 +139,10 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
             maxX = pt.x();
         }
         if(pt.y() < minY){
-            minY = pt.x();
+            minY = pt.y();
         }
         if(pt.y() > maxY){
-            maxY = pt.x();
+            maxY = pt.y();
         }
     }
 
@@ -162,8 +162,9 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
 
                 int ind = (height-1-y) * width + x;
                  if(z_interpolated < depth_buf[ind]){
-                    depth_buf[ind] = z_interpolated;
                     set_pixel(Vector3f(x,y,0),t.getColor());
+                    depth_buf[ind] = z_interpolated;
+                    
                  }
             }
         }
