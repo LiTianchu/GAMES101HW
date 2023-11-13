@@ -39,24 +39,24 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float z
     float yTop = ((xRight - xLeft) * aspect_ratio) /2; //t
     float yBottom = -yTop; //b
 
-    Eigen::Matrix4f ortho_center;
-    Eigen::Matrix4f ortho_scale_2;
-    Eigen::Matrix4f persp_to_ortho;
+    // Eigen::Matrix4f ortho_center;
+    // Eigen::Matrix4f ortho_scale_2;
+    // Eigen::Matrix4f persp_to_ortho;
     
-    ortho_center << 1, 0, 0, -(xRight+xLeft)/2,
-                        0, 1, 0, -(yTop + yBottom)/2,
-                            0, 0, 1, -(zNear + zFar) / 2,
-                                0, 0, 0, 1;
+    // ortho_center << 1, 0, 0, -(xRight+xLeft)/2,
+    //                     0, 1, 0, -(yTop + yBottom)/2,
+    //                         0, 0, 1, -(zNear + zFar) / 2,
+    //                             0, 0, 0, 1;
     
-    ortho_scale_2 << 2/(xRight - xLeft), 0, 0, 0,
-                        0, 2/(yTop-yBottom), 0, 0,
-                            0, 0, -2/(zNear-zFar), 0,
-                                0, 0, 0, 1;
-    persp_to_ortho << zNear, 0, 0, 0,
-                        0, zNear, 0, 0,
-                            0, 0, zNear + zFar, -zNear*zFar,
-                                0, 0, -1, 0;
-    projection = ortho_scale_2 * ortho_center * persp_to_ortho;
+    // ortho_scale_2 << 2/(xRight - xLeft), 0, 0, 0,
+    //                     0, 2/(yTop-yBottom), 0, 0,
+    //                         0, 0, -2/(zFar-zNear), 0,
+    //                             0, 0, 0, 1;
+    // persp_to_ortho << zNear, 0, 0, 0,
+    //                     0, zNear, 0, 0,
+    //                         0, 0, zNear + zFar, -zNear*zFar,
+    //                             0, 0, -1, 0;
+    // projection = ortho_scale_2 * ortho_center * persp_to_ortho;
     // Eigen::Matrix4f projection;
 
     // // Convert eye_fov to radians
@@ -69,15 +69,14 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float z
     // float yTop = ((xRight - xLeft) * aspect_ratio) / 2.0f;
     // float yBottom = -yTop;
 
-    // // Create perspective projection matrix
-    // projection << (2.0f * zNear) / (xRight - xLeft), 0, (xRight + xLeft) / (xRight - xLeft), 0,
-    //               0, (2.0f * zNear) / (yTop - yBottom), (yTop + yBottom) / (yTop - yBottom), 0,
-    //               0, 0, -(zFar + zNear) / (zFar - zNear), (-2.0f * zFar * zNear) / (zFar - zNear),
-    //               0, 0, -1, 0;
+    // Create perspective projection matrix (OpenGL perspective matrix)
+    projection << (2.0f * zNear) / (xRight - xLeft), 0, (xRight + xLeft) / (xRight-xLeft), 0,
+                  0, (2.0f * zNear) / (yTop - yBottom), (yTop + yBottom) / (yTop-yBottom), 0,
+                  0, 0, (zFar + zNear) / (zNear-zFar), (2.0f * zFar * zNear) / (zNear-zFar),
+                  0, 0, -1, 0;
 
     return projection;
 
-    //return projection;
 }
 
 int main(int argc, const char** argv)
