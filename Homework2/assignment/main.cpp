@@ -32,8 +32,52 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float z
 {
     // TODO: Copy-paste your implementation from the previous assignment.
     Eigen::Matrix4f projection;
+    
+    float eye_fov_rad = (eye_fov /180.0f) * std::acos(-1);
+    float xRight = zNear * std::tan(eye_fov_rad/2); //r
+    float xLeft = -xRight; //l
+    float yTop = ((xRight - xLeft) * aspect_ratio) /2; //t
+    float yBottom = -yTop; //b
+
+    Eigen::Matrix4f ortho_center;
+    Eigen::Matrix4f ortho_scale_2;
+    Eigen::Matrix4f persp_ortho;
+    
+    ortho_center << 1, 0, 0, -(xRight+xLeft)/2,
+                        0, 1, 0, -(yTop + yBottom)/2,
+                            0, 0, 1, -(zNear + zFar) / 2,
+                                0, 0, 0, 1;
+    
+    ortho_scale_2 << 2/(xRight - xLeft), 0, 0, 0,
+                        0, 2/(yTop-yBottom), 0, 0,
+                            0, 0, -2/(zFar - zNear), 0,
+                                0, 0, 0, 1;
+    persp_ortho << zNear, 0, 0, 0,
+                        0, zNear, 0, 0,
+                            0, 0, zNear + zFar, -zNear*zFar,
+                                0, 0, 1, 0;
+    projection = ortho_scale_2 * ortho_center * persp_ortho;
+    // Eigen::Matrix4f projection;
+
+    // // Convert eye_fov to radians
+    // float eye_fov_rad = (eye_fov / 180.0f) * M_PI;
+
+    // // Calculate the frustum parameters
+    // float tan_half_fov = std::tan(eye_fov_rad / 2.0f);
+    // float xRight = zNear * tan_half_fov;
+    // float xLeft = -xRight;
+    // float yTop = ((xRight - xLeft) * aspect_ratio) / 2.0f;
+    // float yBottom = -yTop;
+
+    // // Create perspective projection matrix
+    // projection << (2.0f * zNear) / (xRight - xLeft), 0, (xRight + xLeft) / (xRight - xLeft), 0,
+    //               0, (2.0f * zNear) / (yTop - yBottom), (yTop + yBottom) / (yTop - yBottom), 0,
+    //               0, 0, -(zFar + zNear) / (zFar - zNear), (-2.0f * zFar * zNear) / (zFar - zNear),
+    //               0, 0, -1, 0;
 
     return projection;
+
+    //return projection;
 }
 
 int main(int argc, const char** argv)
