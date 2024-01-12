@@ -5,7 +5,9 @@ find_package(OpenCV REQUIRED)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(/usr/local/include)
-
 add_executable(Rasterizer main.cpp rasterizer.hpp rasterizer.cpp Triangle.hpp Triangle.cpp)
+target_include_directories(Rasterizer PRIVATE
+E:\\Tools\\C++_Libraries
+) #change it to library path for Eigen3
+
 target_link_libraries(Rasterizer ${OpenCV_LIBRARIES})
